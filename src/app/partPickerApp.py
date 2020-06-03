@@ -17,7 +17,11 @@ datapath = '../../data/raw/4579_Intel_CPUs.csv'
 data = pd.read_csv(datapath) 
 
 st.title('PartPicker')
-option = st.sidebar.selectbox('Product Collection?', data['Product_Collection'])
+options = st.selectbox('Product Collection?', data['Product_Collection'])
+
+options = st.multiselect('Product Collection?', data['Product_Collection'])
+
+options = st.multiselect('Product Collection', ['Price','Best Value','Performance'])
 
 age = st.slider('How old are you?', 0, 130, 25)
 st.write("I'm ", age, 'years old')
