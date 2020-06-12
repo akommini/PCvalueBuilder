@@ -5,7 +5,6 @@ Created on Sat Jun  6 21:09:37 2020
 @author: NTSL6
 """
 
-import numpy as np
 import pandas as pd
 import dash
 import dash_core_components as dcc
@@ -28,10 +27,7 @@ HDDSDD = pd.read_csv('../data/hardDriveCleaned.csv')
 CPUIntel = pd.read_csv('../data/CPUCleanedIntel.csv')
 GPU = pd.read_csv('../data/GPUCleaned.csv')
 
-
-
-
-
+application = app.server
 
 
 app.layout = html.Div(children=[
@@ -268,4 +264,5 @@ app.layout = html.Div(children=[
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    application.run(debug=True)
+    #application.scripts.config.serve_locally = True
