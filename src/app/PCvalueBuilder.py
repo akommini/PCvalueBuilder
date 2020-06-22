@@ -2,127 +2,138 @@
 """
 Created on Mon Jun  1 11:43:03 2020
 
-@author: NTSL6
+@author: Adithya Kommini
 """
 
 import streamlit as st
-# To make things easier later, we're also importing numpy and pandas for
-# working with sample data.
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
 import webbrowser
 
 
-
-#datapath = '../../data/raw/4579_Intel_CPUs.csv'
-#data = pd.read_csv(datapath) 
-
-
+# Import database
+# RAM
 pdDDR4 = pd.read_csv('../data/RAM_DDR43_Cleaned.csv')
+# Harddrive
 HDDSDD = pd.read_csv('../data/HDDSSDclean.csv') 
+# CPU
 CPUIntel = pd.read_csv('../data/CPUCleanedprice.csv')
 CPUIntel_price = pd.read_csv('../data/CPUCleanedprice.csv')
+# GPU
 GPU = pd.read_csv('../data/GPUprice_G3Dmark.csv')
 GPU_price = pd.read_csv('../data/GPUprice_G3Dmark.csv')
 coeffMark = pd.read_csv('../data/Coefficients.csv')
 
+# Title and description of the streamlit app
 st.title('PCvalueBuilder')
 st.subheader('Predicting the performance and value of replacement PC parts')
-
 st.markdown('This tool recommends a replacement part for your PC. Please select three parts among processor, GPU, RAM and hard drive for the tool to recommend the available choices for the fourth part.')
 ##################################################################
+# Part 1 display select box
 part_avail = ['Processor','GPU','Hard Drive','RAM']
 part_1 = st.selectbox('Select Part', ['Processor','GPU','Hard Drive','RAM'])
+
+# Display the processor options
 if part_1 == 'Processor':
     options_1 = st.selectbox('Part 1: Processor', CPUIntel['name'])
     CPU_Mark = CPUIntel[CPUIntel['name'] == options_1].CPUMark.tolist()[0]
     CPU_year = CPUIntel[CPUIntel['name'] == options_1].year.tolist()[0]
     CPU_Mark_p = CPUIntel_price[CPUIntel_price['name'] == options_1].CPUMark.tolist()[0]/CPUIntel_price[CPUIntel_price['name'] == options_1].price.tolist()[0]
+# Display the GPU options
 elif part_1 == 'GPU':
     options_1 = st.selectbox('Part 1: GPU', GPU['name'])
     GPU_Mark = GPU[GPU['name'] == options_1].G3DMark.tolist()[0]
     GPU_Mark_p = GPU_price[GPU_price['name'] == options_1].G3DMark.tolist()[0]/GPU_price[GPU_price['name'] == options_1].price.tolist()[0]
     GPU_year = GPU[GPU['name'] == options_1].year.tolist()[0]
+# Display the Harddrive options
 elif part_1 == 'Hard Drive':
     options_1 = st.selectbox('Part 1: Hard Drive', HDDSDD['name'])
     Hard_Mark = HDDSDD[HDDSDD['name'] == options_1].HardMark.tolist()[0]
     Hard_Mark_year = HDDSDD[HDDSDD['name'] == options_1].year.tolist()[0]
     Hard_Mark_p = HDDSDD[HDDSDD['name'] == options_1].HardMark.tolist()[0]/HDDSDD[HDDSDD['name'] == options_1].price.tolist()[0]
+# Display the RAM options
 elif part_1 == 'RAM':
     options_1 = st.selectbox('Part 1: RAM', pdDDR4['name'])
     RAM_Mark = pdDDR4[pdDDR4['name'] == options_1].RAMmark.tolist()[0]
     RAM_Mark_p = pdDDR4[pdDDR4['name'] == options_1].RAMmark.tolist()[0]/pdDDR4[pdDDR4['name'] == options_1].Price.tolist()[0]
 
 ##################################################################
+# Part 2 display select box
 part2_specs = ['GPU','Hard Drive','RAM','Processor']
 part_2 = st.selectbox('Select Part 2', part2_specs)
+
+# Display the processor options
 if part_2 == 'Processor':
     options_2 = st.selectbox('Part 2: Processor', CPUIntel['name'])
     CPU_Mark = CPUIntel[CPUIntel['name'] == options_2].CPUMark.tolist()[0]
     CPU_year = CPUIntel[CPUIntel['name'] == options_2].year.tolist()[0]
     CPU_Mark_p = CPUIntel_price[CPUIntel_price['name'] == options_2].CPUMark.tolist()[0]/CPUIntel_price[CPUIntel_price['name'] == options_2].price.tolist()[0]
+# Display the GPU options
 elif part_2 == 'GPU':
     options_2 = st.selectbox('Part 2: GPU', GPU['name'])
     GPU_Mark = GPU[GPU['name'] == options_2].G3DMark.tolist()[0]
     GPU_Mark_p = GPU_price[GPU_price['name'] == options_2].G3DMark.tolist()[0]/GPU_price[GPU_price['name'] == options_2].price.tolist()[0]
     GPU_year = GPU[GPU['name'] == options_2].year.tolist()[0]
+# Display the Harddrive options
 elif part_2 == 'Hard Drive':
     options_2 = st.selectbox('Part 2: Hard Drive', HDDSDD['name'])
     Hard_Mark = HDDSDD[HDDSDD['name'] == options_2].HardMark.tolist()[0]
     Hard_Mark_year = HDDSDD[HDDSDD['name'] == options_2].year.tolist()[0]
     Hard_Mark_p = HDDSDD[HDDSDD['name'] == options_2].HardMark.tolist()[0]/HDDSDD[HDDSDD['name'] == options_2].price.tolist()[0]
+# Display the RAM options
 elif part_2 == 'RAM':
     options_2 = st.selectbox('Part 2: RAM', pdDDR4['name'])
     RAM_Mark = pdDDR4[pdDDR4['name'] == options_2].RAMmark.tolist()[0]
     RAM_Mark_p = pdDDR4[pdDDR4['name'] == options_2].RAMmark.tolist()[0]/pdDDR4[pdDDR4['name'] == options_2].Price.tolist()[0]
 
 ##################################################################
+# Part 2 display select box
 part3_specs = ['RAM','Processor','GPU','Hard Drive',]
 part_3 = st.selectbox('Select Part 3', part3_specs)
+# Display the processor options
 if part_3 == 'Processor':
     options_3 = st.selectbox('Part 3: Processor', CPUIntel['name'])
     CPU_Mark = CPUIntel[CPUIntel['name'] == options_3].CPUMark.tolist()[0]
     CPU_year = CPUIntel[CPUIntel['name'] == options_3].year.tolist()[0]
     CPU_Mark_p = CPUIntel_price[CPUIntel_price['name'] == options_3].CPUMark.tolist()[0]/CPUIntel_price[CPUIntel_price['name'] == options_3].price.tolist()[0]
+# Display the GPU options
 elif part_3 == 'GPU':
     options_3 = st.selectbox('Part 3: GPU', GPU['name'])
     GPU_Mark = GPU[GPU['name'] == options_3].G3DMark.tolist()[0]
     GPU_Mark_p = GPU_price[GPU_price['name'] == options_3].G3DMark.tolist()[0]/GPU_price[GPU_price['name'] == options_3].price.tolist()[0]
     GPU_year = GPU[GPU['name'] == options_3].year.tolist()[0]
+# Display the Harddrive options
 elif part_3 == 'Hard Drive':
     options_3 = st.selectbox('Part 3: Hard Drive', HDDSDD['name'])
     Hard_Mark = HDDSDD[HDDSDD['name'] == options_3].HardMark.tolist()[0]
     Hard_Mark_year = HDDSDD[HDDSDD['name'] == options_3].year.tolist()[0]
     Hard_Mark_p = HDDSDD[HDDSDD['name'] == options_3].HardMark.tolist()[0]/HDDSDD[HDDSDD['name'] == options_3].price.tolist()[0]
+# Display the RAM options
 elif part_3 == 'RAM':
     options_3 = st.selectbox('Part 3: RAM', pdDDR4['name'])
     RAM_Mark = pdDDR4[pdDDR4['name'] == options_3].RAMmark.tolist()[0]
     RAM_Mark_p = pdDDR4[pdDDR4['name'] == options_3].RAMmark.tolist()[0]/pdDDR4[pdDDR4['name'] == options_3].Price.tolist()[0]
 
 ##################################################################
-#part_options.pop(part_options.index(part_1))
-#part_options.pop(part_options.index(part_2))
-#part_options.pop(part_options.index(part_3))
+# Identify the part to be suggested
 parts_select = [part_1,part_2,part_3]
 part_options = []
 for i in part_avail:
     if i not in parts_select:
         part_options.append(i)
 
-#age = ((['Processor','GPU','Hard Drive','RAM'].remove(part_1)).remove(part_2)).remove(part_3)
+# Display options for recommendations
 st.write("Recommending the available options for", part_options[0],":")
 st.markdown('Enter your preference between value and performance. If the preference is value, then the tool recommends the parts that provide best performance for the price') 
 options_pref = st.selectbox('Preference', ['Value','Performance'])
 
 
-#age = st.slider('How old are you?', 0, 130, 25)
-#st.write("I'm ", age, 'years old')
 if len(part_options) == 1:
-    
+    # Suggesting processor options
     if part_options[0] == 'Processor':
-        
         otherMark = (GPU_Mark*coeffMark.GPU_coeff[0])+(RAM_Mark*coeffMark.RAM_coeff[0])+(Hard_Mark*coeffMark.HDD_coeff[0])
+         # Idnetifying the year 
         if GPU_year >= 2018:
             maxyear = 2020
             minyear = 2016
@@ -132,17 +143,22 @@ if len(part_options) == 1:
         else:
             maxyear = GPU_year+2
             minyear = GPU_year-2
+        # CPU data extract
         CPU_data = CPUIntel[(CPUIntel['year']<=maxyear) & (CPUIntel['year']>=minyear)]
+        # Calculating the normal distribution
         mu, std = norm.fit(np.array(CPU_data.CPUMark.tolist()))
+        # Getting the price data
         priceSort = np.asarray((CPU_data.price.tolist()))
         min_price = int(np.sort(priceSort)[5])
+        # get the budget data
         Budprice = st.number_input('Enter your budget: (By default shows best performing processors)',min_value = min_price,max_value = int(max(CPU_data.price.tolist()))+100)
+        # Identify the processors based on budget
         if Budprice == min_price:
             CPU_data = CPU_data[(CPU_data['price'] < int(max(GPU.price.tolist()))+100)]
         else:
             CPU_data = CPU_data[(CPU_data['price'] < Budprice)]
+        # Identify the processors based on budget
         if options_pref == 'Performance':
-
             CPU_Mark = np.array(CPU_data.CPUMark.tolist())*coeffMark.CPU_coeff[0]
             mu, std = norm.fit(np.array(CPU_data.CPUMark.tolist()))
             sysScore = ((otherMark+CPU_Mark)/5.0)
