@@ -5,22 +5,22 @@ PC market in the United States is estimated to be worth $20 billion in 2019. 40%
 
 This points out the need to optimize the value and performance to maximize the returns. Also, identifying the parts with resonable performance boost to the existing PC parts requires the extensive technical knowledge.
 
-### Recommender system
+## Recommender system
 To solve this problem, a recommender system is designed to assist customers with making these decisions. Users can select the existing PC configuration and the part they want to replace/upgrade. Our randomforest regression model calculates the PC system score for each available replacement part by pairing them with the existing PC. Users can give their preference on whether they need a part with maximum performance or maximum value (performance for the price). Also, users can input their budget constraints. Taking into consideration the user preferences and system score, 5 best available replacement part are recommended for user to choose from.
 
 ![ModelArch](/src/EDA/Architecture.png)
 
-### Data
+## Data
 The performance benchmarks
 
-### Model
+## Model
 
 
-### WebApp
+## WebApp
 The Web app is implemented using Streamlit and deployed on a AWS EC2 instance. The WebApp can be accessed at: https://akommini.me
 
-### Value returns
+## Value returns
 
-### External Links
+## External Links
 [Slides](https://docs.google.com/presentation/d/1LHpEzARqDha4KzdbR8knts1USW-q8ZNy6Wm3gi-RkPI/edit?usp=sharing)<br/>
 [WebApp](https://akommini.me)
