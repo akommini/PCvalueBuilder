@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import norm
 import webbrowser
+import math
 
 
 # Import database
@@ -125,7 +126,7 @@ for i in part_avail:
 
 # Display options for recommendations
 st.write("Recommending the available options for", part_options[0],":")
-st.markdown('Enter your preference between value and performance. If the preference is value, then the tool recommends the parts that provide best performance for the price') 
+st.markdown('Enter your preference between value and performance. If the preference is value, then the tool recommends the parts that provide best performance for the price.') 
 options_pref = st.selectbox('Preference', ['Value','Performance'])
 
 
@@ -160,7 +161,7 @@ if len(part_options) == 1:
         # Identify the processors based on budget
         if options_pref == 'Performance':
             CPU_Mark = np.array(CPU_data.CPUMark.tolist())*coeffMark.CPU_coeff[0]
-            mu, std = norm.fit(np.array(CPU_data.CPUMark.tolist()))
+            #mu, std = norm.fit(np.array(CPU_data.CPUMark.tolist()))
             sysScore = ((otherMark+CPU_Mark)/5.0)
             indices = np.argsort(sysScore)
             
@@ -213,7 +214,7 @@ if len(part_options) == 1:
         mu, std = norm.fit(np.array(GPU_data.G3DMark.tolist()))
         priceSort = np.asarray((GPU_data.price.tolist()))
         min_price = int(np.sort(priceSort)[5])
-        Budprice = st.number_input('Enter your budget: (By default shows the available best GPU options)',min_value = min_price,max_value = int(max(GPU.price.tolist()))+100)
+        Budprice = st.number_input('Enter your budget: (By default shows the best available GPU options)',min_value = min_price,max_value = int(max(GPU.price.tolist()))+100)
         if Budprice == min_price:
             GPU_data = GPU_data[(GPU_data['price'] < int(max(GPU.price.tolist()))+100)]
         else:
@@ -256,9 +257,9 @@ if len(part_options) == 1:
             if GPU_data.shape[0]>10:
                 for i in range(5):
                     if i == 0:
-                        result = pd.concat([result,(pd.Series([GPU_price.iloc[indices[-(i+1)]]['name'], int(sysScore[indices[-(i+1)]]), int(valueScore[indices[-(i+1)]]), GPU_data.iloc[indices[-(i+1)]]['price']]))],ignore_index=True)
+                        result = pd.concat([result,(pd.Series([GPU_data.iloc[indices[-(i+1)]]['name'], int(sysScore[indices[-(i+1)]]), int(valueScore[indices[-(i+1)]]), GPU_data.iloc[indices[-(i+1)]]['price']]))],ignore_index=True)
                     else:
-                        result = pd.concat([result,(pd.Series([GPU_price.iloc[indices[-(i+1)]]['name'], int(sysScore[indices[-(i+1)]]), int(valueScore[indices[-(i+1)]]), GPU_data.iloc[indices[-(i+1)]]['price']]))], axis=1,ignore_index=True)
+                        result = pd.concat([result,(pd.Series([GPU_data.iloc[indices[-(i+1)]]['name'], int(sysScore[indices[-(i+1)]]), int(valueScore[indices[-(i+1)]]), GPU_data.iloc[indices[-(i+1)]]['price']]))], axis=1,ignore_index=True)
                 result.index = [part_options[0] + " name", "PC Performance score", "Value Score(/$)", "Price"]
                 result= result.T
                 result.index = ["1","2","3","4","5"]
@@ -283,11 +284,12 @@ if len(part_options) == 1:
         HDD_data = HDDSDD[(HDDSDD['year']<=maxyear) & (HDDSDD['year']>=minyear)]
         mu, std = norm.fit(np.array(HDD_data.HardMark.tolist()))
         if options_pref == 'Performance':
-            HDDSize = st.number_input('Enter your preferred size in GB (<=2000): (By default shows best available RAM)',min_value = 128,max_value = 2000,key = 1253)
-            HDD_data = HDD_data[HDD_data['size'] <= HDDSize ]
+            HDDSize = st.number_input('Enter the minimum hard drive size preferred in GB (<=2000): (By default shows best performing hard drive options)',min_value = 128,max_value = 2000,key = 1253)
+            HDDSize = math.log2(HDDSize)
+            HDD_data = HDD_data[(HDD_data['size'] >= pow(2,math.floor(HDDSize)))]
             priceSort = np.asarray((HDD_data.price.tolist()))
             min_price = int(np.sort(priceSort)[5])
-            Budprice = st.number_input('Enter your budget: (By default shows best performing hard drive options)',min_value = min_price,max_value = int(max(HDD_data.price.tolist()))+100)
+            Budprice = st.number_input('Enter your budget in $: (By default shows best performing hard drive options)',min_value = min_price,max_value = int(max(HDD_data.price.tolist()))+100)
             if Budprice == min_price:
                 HDD_data = HDD_data[(HDD_data['price'] < int(max(HDD_data.price.tolist()))+100)]
             else:
@@ -324,11 +326,12 @@ if len(part_options) == 1:
             
             
         elif options_pref == 'Value':
-            HDDSize = st.number_input('Enter your preferred size in GB (<=2000): (By default shows best available RAM)',min_value = 128,max_value = 2000,key = 1253)
-            HDD_data = HDD_data[HDD_data['size'] <= HDDSize ]
+            HDDSize = st.number_input('Enter the minimum hard drive size preferred in GB (<=2000): (By default shows best value hard drive options)',min_value = 128,max_value = 2000,key = 1253)
+            HDDSize = math.log2(HDDSize)
+            HDD_data = HDD_data[(HDD_data['size'] >= pow(2,math.floor(HDDSize)))]
             priceSort = np.asarray((HDD_data.price.tolist()))
             min_price = int(np.sort(priceSort)[5])
-            Budprice = st.number_input('Enter your budget: (By default shows best value hard drive options)',min_value = min_price,max_value = int(max(HDD_data.price.tolist()))+100)
+            Budprice = st.number_input('Enter your budget in $: (By default shows best value hard drive options)',min_value = min_price,max_value = int(max(HDD_data.price.tolist()))+100)
             if Budprice == min_price:
                 HDD_data = HDD_data[(HDD_data['price'] < int(max(HDD_data.price.tolist()))+100)]
             else:
@@ -346,14 +349,14 @@ if len(part_options) == 1:
                 for i in range(5):
                     if i == 0:
                         sizeHDD = float(HDD_data.iloc[indices[-(i+1)]]['size'])
-                        if sizeHDD > 1000:
+                        if sizeHDD < 10:
                             sizeHDD = str(sizeHDD/1000) + ' TB'
                         else:
                             sizeHDD = str(sizeHDD) + ' GB'
                         result = pd.concat([result,(pd.Series([HDD_data.iloc[indices[-(i+1)]]['name'], sizeHDD ,int(sysScore_p[indices[-(i+1)]]), int(valueScore[indices[-(i+1)]]), HDD_data.iloc[indices[-(i+1)]]['price']]))],ignore_index=True)
                     else:
                         sizeHDD = float(HDD_data.iloc[indices[-(i+1)]]['size'])
-                        if sizeHDD > 1000:
+                        if sizeHDD < 10:
                             sizeHDD = str(sizeHDD/1000) + ' TB'
                         else:
                             sizeHDD = str(sizeHDD) + ' GB'
@@ -386,11 +389,11 @@ if len(part_options) == 1:
 
         
         if options_pref == 'Performance':
-            ramSize = st.number_input('Enter your preferred size in GB (<=32): (By default shows best available RAM)',min_value = min_size,max_value = max_size,key = 1253)
-            RAM_data = RAM_data[RAM_data['totalSize'] <= ramSize ]
+            ramSize = st.number_input('Enter your preferred minimum size in GB (<=32): (By default shows best performing RAM)',min_value = min_size,max_value = max_size,key = 1253)
+            RAM_data = RAM_data[RAM_data['totalSize'] >= ramSize ]
             priceSort = np.asarray((RAM_data.Price.tolist()))
             min_price = int(np.sort(priceSort)[15])
-            Budprice = st.number_input('Enter your budget in $: (By default shows best performance RAM)',min_value = min_price,max_value = int(max(RAM_data.Price.tolist()))+100,key = 1254)
+            Budprice = st.number_input('Enter your budget in $: (By default shows best performing RAM)',min_value = min_price,max_value = int(max(RAM_data.Price.tolist()))+100,key = 1254)
             
             if Budprice == min_price:
                 RAM_data = RAM_data[(RAM_data['Price'] < int(max(RAM_data.Price.tolist()))+100)]
@@ -421,16 +424,13 @@ if len(part_options) == 1:
                 result= result.T
                 result.index = ["1","2","3","4","5"]
                 st.write("Showing", part_options[0], 'options with best',options_pref )
-                st.write("Showing", mu, 'options with best',std)
-                st.write("Showing", otherMark)
-                st.write(CPU_year)
                 st.table(result)
             else:
                 st.subheader("Please increase your budget")
             
             
         elif options_pref == 'Value':
-            ramSize = st.number_input('Enter your preferred size in GB (<=32): (By default shows best available RAM)',min_value = min_size,max_value = max_size,key = 1253)
+            ramSize = st.number_input('Enter your preferred minimum size in GB (<=32): (By default shows best value RAM)',min_value = min_size,max_value = max_size,key = 1253)
             RAM_data = RAM_data[RAM_data['totalSize'] >= ramSize ]
             priceSort = np.asarray((RAM_data.Price.tolist()))
             min_price = int(np.sort(priceSort)[15])
@@ -467,8 +467,6 @@ if len(part_options) == 1:
                 result= result.T
                 result.index = ["1","2","3","4","5"]
                 st.write("Showing", part_options[0], 'options with best',options_pref )
-                st.write("Showing", mu, 'options with best',std)
-                st.write(CPU_year)
                 st.table(result)
             else:
                 st.subheader("Compatable matches not found. Please increase your budget")
@@ -478,12 +476,13 @@ else:
     st.subheader("Please select three unique parts from Processor, GPU, RAM and Hard drive.")
 
 st.write('More information about this tool:')
-url_slides = 'https://docs.google.com/presentation/d/1LHpEzARqDha4KzdbR8knts1USW-q8ZNy6Wm3gi-RkPI/edit?usp=sharing'
-if st.button('Slide deck'):
-    webbrowser.open_new_tab(url_slides)
-    
-url_git = 'https://github.com/akommini/PCvalueBuilder'
-if st.button('Github Repo'):
-    webbrowser.open_new_tab(url_git)
+#url_slides = 'https://docs.google.com/presentation/d/1LHpEzARqDha4KzdbR8knts1USW-q8ZNy6Wm3gi-RkPI/edit?usp=sharing'
+#if st.button('Slide deck'):
+#    webbrowser.open_new_tab(url_slides)
+st.markdown('[Slide deck](https://docs.google.com/presentation/d/1LHpEzARqDha4KzdbR8knts1USW-q8ZNy6Wm3gi-RkPI/edit?usp=sharing)')
+#url_git = 'https://github.com/akommini/PCvalueBuilder'
+#if st.button('Github Repo'):
+#    webbrowser.open_new_tab(url_git)
+st.markdown('[Github Repo](https://github.com/akommini/PCvalueBuilder)')
 
 

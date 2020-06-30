@@ -2,7 +2,7 @@
 """
 Created on Mon Jun 15 23:22:18 2020
 
-@author: NTSL6
+@author: Adithya Kommini
 """
 
 import numpy as np
