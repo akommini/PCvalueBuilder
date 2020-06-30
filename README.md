@@ -11,7 +11,19 @@ To solve this problem, a recommender system is designed to assist customers with
 ![ModelArch](/src/EDA/Architecture.png)
 
 ## Data
-The performance benchmarks
+Right now, the model can work with four different PC components:
+- Processor
+- Graphics Card (GPU)
+- Hard Drive
+- Memory (RAM)
+
+Available replacement parts are suggested to one of components given the other three components in the exisitng system are selected. The performance data ont the available parts for these components are extracted from PassMark database. 
+- CPU Mark - 2600 Processor options
+- G3D Mark - 3000 GPU options
+- Disk Mark - 1100 Hard Drive options
+- Memory Mark - 1175 Memory (RAM) options
+
+The price and technical data is extracted from PassMark database, Newegg and Manufacturer's website.
 
 ## Model
 
