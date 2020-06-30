@@ -26,12 +26,13 @@ Available replacement parts are suggested to one of components given the other t
 The price and technical data is extracted from PassMark database, Newegg and Manufacturer's website.
 
 ## Model
-
+A RandomForest regression model is used to calculate the system score. A 80%-20% test-train split is used to train the model using the system score extracted from PassMark database. The model achieves a R2 of 89.1%. System score is normalized using the price to extract the value. Compatibility of the parts is resolved before recommending the part. User budget and minimum part requirements are honored. For memory (RAM) and hard drive, users can chose the minimum capapcity requirements.
 
 ## WebApp
 The Web app is implemented using Streamlit and deployed on a AWS EC2 instance. The WebApp can be accessed at: https://akommini.me
 
 ## Value returns
+The performance value return on the money invested is calculated by comparing our value recommendations with top the line part with best performance.
 Part type | Value return
 ------------ | -------------
 Processor| 1.5x - 9x
