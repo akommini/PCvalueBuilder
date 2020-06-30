@@ -1,7 +1,8 @@
 # PCvalueBuilder
-#### A recommender system that helps customers with identifying PC replacement parts with optimal value and performance.
-PC market in the United States is estimated to be worth $20 billion in 2019. 40% of PCs bought experience hardware failures in the second year of use. Identifying and selecting replacement parts is a tedious task for novice customers due to the range of parts available in market. 
+### A recommender system that helps customers with identifying PC replacement parts with optimal value and performance.
+PC market in the United States is estimated to be worth $20 billion in 2019. 40% of PCs bought experience hardware failures in the second year of use. Selecting the  replacement parts is a tedious task for novice customers due to the range of parts available in the market. For value conscious buyers, return on the investment is an important factor in making the purchase decisions. For example, the performance of hard drives for the price does not scale linearly as seen below.
 ![HarddriveValue](/src/EDA/HDD_perf_price_fin.png)
+This points out the need to optimize the value and performance to maximize the returns. Also, identifying the parts with resonable performance boost to the existing PC parts requires the extensive technical knowledge.
 
 ### Recommender system
 
