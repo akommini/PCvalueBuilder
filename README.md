@@ -32,7 +32,12 @@ The price and technical data is extracted from PassMark database, Newegg and Man
 The Web app is implemented using Streamlit and deployed on a AWS EC2 instance. The WebApp can be accessed at: https://akommini.me
 
 ## Value returns
-
+Part type | Value return
+------------ | -------------
+Processor| 1.5x - 9x
+Graphics card (GPU) | 1.4x - 3x
+Memory (RAM) | 1.5x - 9x
+Hard disk | 1.2x - 2x
 ## External Links
 [Slides](https://docs.google.com/presentation/d/1LHpEzARqDha4KzdbR8knts1USW-q8ZNy6Wm3gi-RkPI/edit?usp=sharing)<br/>
 [WebApp](https://akommini.me)
